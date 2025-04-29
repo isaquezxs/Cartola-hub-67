@@ -1,7 +1,3 @@
-# Cartola-hub-67
-Hehejwjeje
--- Brookhaven Script HUB Simples (Exemplo)
--- Feito para uso com exploit executores como Synapse X, Fluxus, etc.
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -51,3 +47,55 @@ bodyVelocity.Parent = boat
 -- Remove a força depois de 2 segundos
 wait(2)
 bodyVelocity:Destroy()
+-- GUI básica com opções de teleportar, voar e trollagem
+
+-- Criando a interface
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TeleportButton = Instance.new("TextButton")
+local FlyButton = Instance.new("TextButton")
+local TrollButton = Instance.new("TextButton")
+
+ScreenGui.Parent = game.CoreGui
+Frame.Parent = ScreenGui
+Frame.Size = UDim2.new(0, 200, 0, 200)
+Frame.Position = UDim2.new(0, 100, 0, 100)
+Frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+Frame.Active = true
+Frame.Draggable = true
+
+-- Função para criar botões
+local function createButton(text, yPos, callback)
+	local button = Instance.new("TextButton")
+	button.Parent = Frame
+	button.Size = UDim2.new(0, 180, 0, 40)
+	button.Position = UDim2.new(0, 10, 0, yPos)
+	button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Font = Enum.Font.SourceSansBold
+	button.TextSize = 18
+	button.Text = text
+	button.MouseButton1Click:Connect(callback)
+	return button
+end
+
+-- Botão de Teleporte
+createButton("Teleportar", 10, function()
+	game.Players.LocalPlayer.Character:MoveTo(Vector3.new(0, 10, 0)) -- Coord aleatória
+end)
+
+-- Botão de Voo
+createButton("Ativar Voo", 60, function()
+	loadstring(game:HttpGet("https://pastebin.com/raw/7rXZ6mqw"))() -- Fly script público
+end)
+
+-- Botão de Trollagem
+createButton("Trollar (Fogo)", 110, function()
+	local char = game.Players.LocalPlayer.Character
+	local part = char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
+	if part and not part:FindFirstChild("Fire") then
+		local fire = Instance.new("Fire", part)
+		fire.Size = 10
+		fire.Heat = 25
+	end
+end)
