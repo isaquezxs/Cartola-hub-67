@@ -1,0 +1,78 @@
+
+local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
+ScreenGui.Name = "BrookhavenHub"
+
+local Frame = Instance.new("Frame", ScreenGui)
+Frame.Position = UDim2.new(0.1, 0, 0.1, 0)
+Frame.Size = UDim2.new(0, 300, 0, 300)
+Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+Frame.BorderSizePixel = 0
+
+local UICorner = Instance.new("UICorner", Frame)
+UICorner.CornerRadius = UDim.new(0, 8)
+
+local UIListLayout = Instance.new("UIListLayout", Frame)
+UIListLayout.Padding = UDim.new(0, 5)
+
+-- Botão criador
+function createButton(text, callback)
+    local button = Instance.new("TextButton", Frame)
+    button.Size = UDim2.new(1, -10, 0, 30)
+    button.Position = UDim2.new(0, 5, 0, 0)
+    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Text = text
+    button.Font = Enum.Font.Gotham
+    button.TextSize = 14
+
+    local corner = Instance.new("UICorner", button)
+    corner.CornerRadius = UDim.new(0, 6)
+
+    button.MouseButton1Click:Connect(callback)
+end
+
+-- Fling Player
+createButton("Fling Jogador", function()
+    local targetName = tostring(game:GetService("Players"):GetPlayers()[2].Name)
+    local target = Players:FindFirstChild(targetName)
+
+    if not target or not target.Character or not target.Character:FindFirstChild("HumanoidRootPart") then
+        warn("Jogador inválido.")
+        return
+    end
+
+    local char = LocalPlayer.Character
+    local hrp = char:WaitForChild("HumanoidRootPart")
+
+    local bodyVelocity = Instance.new("BodyVelocity", hrp)
+    bodyVelocity.Velocity = Vector3.new(9999, 9999, 9999)
+    bodyVelocity.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+
+    wait(0.2)
+    bodyVelocity:Destroy()
+end)
+
+-- Fling Boat (simulação básica)
+createButton("Fling Boat", function()
+    for _, v in pairs(workspace:GetDescendants()) do
+        if v:IsA("VehicleSeat") then
+            v.Velocity = Vector3.new(9999, 9999, 9999)
+        end
+    end
+end)
+
+-- Teleportar para local
+createButton("Teleportar para Centro", function()
+    local char = LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        char:MoveTo(Vector3.new(-71, 48, 397)) -- Substitua pelas coordenadas desejadas
+    end
+end)
+
+-- Teleportar para Montanha
+createButton("Teleportar para Montanha", function()
+    local char = LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        char:MoveTo(Vector3.new(-431, 184, -687))
+    end
+end)
